@@ -8,3 +8,4 @@ During the online step, n values are revealed, and we extend these n values to a
 2. The two party exchange messages and obtain n values.
 3. Prepare for the multiplication by calling extendfrom() to get a Beaver tuple called delta
 4. Each party execute Muls(). The 1st parameter is delta, the second parameter is the beaver tuple shared in the offline step, the third parameter is a bool value to indicate the party's role.
+
