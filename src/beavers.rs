@@ -25,7 +25,7 @@ impl Beaver{
 
             let rd_bits = stream.next_bits(NUMERIC_LEN);
             rv[loc] = RingElm::from( bits_to_u32(&rd_bits[..NUMERIC_LEN]));
-            rv[loc] = RingElm::from((i+2) as u32);
+            //rv[loc] = RingElm::from((i+2) as u32);
         }// initialize the n atom-s which is in the 2^i-1 location
         //println!("{:?}", rv);
         // assign the other locations
@@ -49,7 +49,7 @@ impl Beaver{
             }
             rv[i] = e;
         } 
-        println!("{:?}", rv);
+        //println!("{:?}", rv);
         Beaver { a: rv, n: n}
     }
 
@@ -121,17 +121,19 @@ pub fn Muls(delta: &Beaver, b: &Beaver, is_server: bool)->Result<RingElm, Box<dy
     if delta.a.len() != b.a.len() && delta.n == b.n{
         return Err("the two beaver tuples don't match".into());
     }
-    
+    //println!("delta={:?}, b={:?}", delta.a, b.a);
     let n = delta.n;
     let N = (1<<n) - 1; //0x0..01..1(n 1-s)
+    //println!("n={}, N={}", n, N);
     let mut r: RingElm = RingElm::from(0);
     if is_server{
         r.add(&delta.a[N-1]);
     }
-
-    for i in 1..(N-1){
+    r.add(&b.a[N-1]);
+    for i in 1..N{
         let mut unit = delta.a[i-1].clone();
         let index = (!i) & N;
+        //println!("i={}, j={}", i, index);
         unit.mul(&b.a[index-1]);
         r.add(&unit);
     }

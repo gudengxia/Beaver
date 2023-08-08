@@ -3,45 +3,7 @@ use beavers::*;
 use idpf::RingElm;
 use idpf::*;
 fn main() {
-    let n: usize = 2;
-    let mut v1= Vec::<RingElm>::new();
-    for i in 1..=n{
-        v1.push(RingElm::from(i as u32));
-    }
-
-    let mut v2= Vec::<RingElm>::new();
-    for i in 1..=n{
-        v2.push(RingElm::from((i+1) as u32));
-    }
-
-    let beaver = Beaver::gen(n);
-
-    let (b1, b2) = beaver.split();
-
-    let mut d1 = v1.clone();
-    let mut d2 = v2.clone();
-
-    for i in 0..n{
-        d1[i].sub(&b1[i]);
-        d2[i].sub(&b2[i]);
-    }
-
-    let mut d = d1.clone();
-    print!("d=(");
-    for i in 0..n{
-        d[i].add(&d2[i]);
-        print!("{:?},", d[i]);
-    }
-    println!(")");
-
-    let delta = Beaver::extendfrom(d);
-
-    let r1 = Muls(&delta, &b1, true).unwrap();
-    let r2 = Muls(&delta, &b2, false).unwrap();
-
-    let mut result = r1.clone();
-    result.add(&r2);
-    println!("{:?}", result); 
+    
 }
 
 
@@ -71,5 +33,53 @@ mod test{
         for i in 0..r1.len(){
             assert_eq!(r1[i], b[i])
         }
+    }
+
+
+    #[test]
+    fn Muls_works(){
+        let n: usize = 6;
+        let mut v1= Vec::<RingElm>::new();
+        for i in 1..=n{
+            v1.push(RingElm::from(i as u32));
+        }
+
+        let mut v2= Vec::<RingElm>::new();
+        for i in 1..=n{
+            v2.push(RingElm::from((i+1) as u32));
+        }
+
+        let beaver = Beaver::gen(n);
+
+        let (b1, b2) = beaver.split();
+
+        let mut d1 = v1.clone();
+        let mut d2 = v2.clone();
+
+        for i in 0..n{
+            d1[i].sub(&b1[i]);
+            d2[i].sub(&b2[i]);
+        }
+
+        let mut d = d1.clone();
+        for i in 0..n{
+            d[i].add(&d2[i]);
+        }
+
+        let delta = Beaver::extendfrom(d);
+
+        let r1 = Muls(&delta, &b1, true).unwrap();
+        let r2 = Muls(&delta, &b2, false).unwrap();
+
+        let mut result = r1.clone();
+        result.add(&r2);
+
+        let mut v_mul = RingElm::from(1);
+        for i in 0..v1.len(){
+            let mut unit = v1[i].clone();
+            unit.add(&v2[i]);
+            v_mul.mul(&unit);
+        } 
+        assert_eq!(v_mul, result);
     }
 }
