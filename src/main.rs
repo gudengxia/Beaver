@@ -66,10 +66,12 @@ mod test{
             d[i].add(&d2[i]);
         }
 
-        let delta = Beaver::extendfrom(d);
+         //let delta = Beaver::extendfrom(d);
 
-        let r1 = Muls(&delta, &b1, true).unwrap();
-        let r2 = Muls(&delta, &b2, false).unwrap();
+        //let r1 = Muls(&delta, &b1, true).unwrap();
+        //let r2 = Muls(&delta, &b2, false).unwrap();
+        let r1 = product(&d, &b1, true).unwrap();
+        let r2 = product(&d, &b2, false).unwrap();
 
         let mut result = r1.clone();
         result.add(&r2);
