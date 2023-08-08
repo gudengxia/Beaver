@@ -140,3 +140,16 @@ pub fn Muls(delta: &Beaver, b: &Beaver, is_server: bool)->Result<RingElm, Box<dy
 
     Ok(r)
 }
+
+pub fn product(delta: &Vec<RingElm>, b: &Beaver, is_server: bool)->Result<RingElm, Box<dyn Error>>{
+    let n = delta.len();
+    let N = b.a.len();
+
+    if N != (1<<n) -1{
+        return Err("the two beaver tuples don't match".into());
+    }
+    let delta_cy = delta.clone();
+    let d = Beaver::extendfrom(delta_cy);
+    let r = Muls(&d, b, is_server);
+    r
+}
